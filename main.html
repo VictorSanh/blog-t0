@@ -1,0 +1,371 @@
+<!-- FIRST BOX -->
+<div id="md-content" class="col-md-12">
+    <blockquote>
+        <p>
+            <div class="md-text">We trained a language model capable of generalizing to unseen natural language tasks
+                while outperforming (or matching) extremely large language models despite being 16x smaller. This is
+                important because a lot of language tasks do not have readily available labels for training. In this
+                blog, we showcase its applications in cooking and answering world knowledge questions.</div>
+        </p>
+    </blockquote>
+    <h2 class="md-inpage-anchor"><strong>Overview</strong><span class="anchor-highlight" style="display: none;"><a
+                href="#!pages/t0.md#Overview">#</a></span></h2>
+    <p>
+        <div class="md-text">When large language models such as GPT-3 (Brown et al., 2020) succeeded in performing
+            downstream tasks without ever finetuning on these tasks, the NLP community got excited about the future of
+            zero-shot (and few-shot) learning: pretrained language models can potentially be applied to a variety of
+            tasks without any (or very few) labeled data and get non-trivial performance.</div>
+    </p>
+    <p align="center" class="md-image-group row">
+        <div class="col-sm-12" style="justify-content: center; display: flex;"><a class="md-image-selfref cboxElement" href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/Octopus.png"
+                title=""><img src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/Octopus.png" alt="T0" width="500"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+    <figcaption align="center">Figure 1. After training on a diverse mixture of tasks (top), T0 generalizes to unseen
+        tasks (bottom).</figcaption><br>
+    <p></p>
+
+    <p>
+        <div class="md-text">At BigScience, we explored the following research question: “<strong>if we explicitly train
+                a language model on a massive mixture of diverse NLP tasks, would it generalize to unseen NLP
+                tasks?</strong>” And the answer is yes (to a certain extent)! We named the resulting model <em>T0</em>
+            as <em>T5 (Raffel et al., 2020) for zero-shot</em>. T0 is trained on a diverse mixture of tasks such as
+            summarization and question answering, and performs well on unseen tasks such as natural language inference,
+            as seen in Figure 1.</div>
+    </p>
+    <p>
+        <div class="md-text">A natural strategy to train a model on a massive multi-task mixture is to use <em>natural
+                language prompting</em>. The key is to reformulate any NLP task into a text-to-text format as if we are
+            asking another person for the answer to the task. The <em>prompt</em> is the part that asks a query about a
+            given instance. With prompting, the model simply receives the text prompt as input and returns a text
+            output. Figure 2 illustrates how to prompt T0 to generate a short biography.</div>
+    </p>
+    <p align="center" class="md-image-group row">
+        <div class="col-sm-12" style="justify-content: center; display: flex;"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/natural_language_prompting.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/natural_language_prompting.png" alt="T0" width="800"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+    <figcaption align="center">Figure 2. An input prompt to generate a short biography given the infobox of the person.
+    </figcaption><br>
+    <p></p>
+
+    <p>
+        <div class="md-text">To create T0, we first collect and convert NLP datasets into a text-to-text format (through
+            crowdsourcing efforts and the <a href="https://github.com/bigscience-workshop/promptsource">promptsource</a>
+            tool). To achieve this goal, we have collected around 2’000 prompts for 170 English datasets. Next, we
+            fine-tune a version of the pretrained T5 language model on the massive mixture of NLP tasks.</div>
+    </p>
+    <p>
+        <div class="md-text">T0 is trained on a diverse set of tasks and prompts. This leads to increased robustness to
+            the prompt wording. Users can structure prompts in an interrogative or affirmative fashion, put instructions
+            at the start or the end of the prompt, or format answer choices as part of a grammatical question or as a
+            list; as long as the input prompt reads naturally, T0 can produce a meaningful response.</div>
+    </p>
+</div>
+
+
+<!-- SECOND BOX -->
+<div id="md-content" class="col-md-12">
+    <h2 class="md-inpage-anchor"><strong>Capabilities</strong><span class="anchor-highlight" style="display: none;"><a
+                href="#!pages/t0.md#Capabilities">#</a></span></h2>
+    <p>
+        <div class="md-text">T0 outperforms or matches extremely large language models 16x larger in size, which have
+            100s of billions of parameters, on a variety of unseen tasks. T0 not only generalizes well to NLP tasks
+            (such as sentence completion and coreference resolution) but also tasks beyond “traditional” NLP tasks (such
+            as describing Python codes and solving logic grid puzzles) without being explicitly trained on them.</div>
+    </p>
+    <p>
+        <div class="md-text">In the rest of this blog post, we showcase two applications with T0++ (a variant of T0
+            trained with more NLP tasks): producing various cooking recommendations and answering questions about world
+            knowledge.</div>
+    </p>
+</div>
+
+
+<!-- THIRD BOX -->
+<div id="md-content" class="col-md-12">
+    <h3 class="md-inpage-anchor">Chef T0<span class="anchor-highlight" style="display: none;"><a
+                href="#!pages/t0.md#Chef_T0">#</a></span></h3>
+    <p>
+        <div class="md-text">T0++ can provide cooking instructions even though it is not trained on cooking recipes data
+            (Bień et al., 2020). It can even generate high-level instructions for complex recipes.</div>
+    </p>
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_1.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_1.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_2.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_2.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_3.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_3.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+    <p>
+        <div class="md-text">What if you have a dish in mind, but you don’t know its ingredients? Don’t worry, T0++ got
+            your back!</div>
+    </p>
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_4.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_4.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_5.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_5.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_6.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_6.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+    <p>
+        <div class="md-text">And the reverse works just as well.</div>
+    </p>
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_7.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_7.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_8.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_8.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_9.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_9.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+    <p>
+        <div class="md-text">What about recommendations for national, regional and seasonal dishes? To T0++, they are
+            all a piece of cake.</div>
+    </p>
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_10.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_10.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_11.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_11.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_12.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_12.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_13.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_13.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_14.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_14.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_15.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_15.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+</div>
+
+
+<!-- FOURTH BOX -->
+<div id="md-content" class="col-md-12">
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_16.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_16.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_17.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_17.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_18.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_18.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+    <p>
+        <div class="md-text">T0++ is also helpful for eggs-ploration of similar dishes.</div>
+    </p>
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_19.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_19.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_20.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_20.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_21.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/cooking_21.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+</div>
+
+
+<!-- FIFTH BOX -->
+<div id="md-content" class="col-md-12">
+    <h3 class="md-inpage-anchor">The World According To T0<span class="anchor-highlight" style="display: none;"><a
+                href="#!pages/t0.md#The_World_According_To_T0">#</a></span></h3>
+    <p>
+        <div class="md-text">T0++ is also capable of responding to world knowledge such as human aging, religion,
+            machine learning, and ethics. All the prompts in this section are adapted from Hendrycks et al.’s
+            (2021)<sup>4</sup> dataset, which aims to measure knowledge acquired by a language model during pretraining.
+            Note that we are not presenting a robust evaluation of T0++ here. We specifically chose questions without
+            technical jargon to make this blog post more accessible to everyone.</div>
+    </p>
+    <p>
+        <div class="md-text">Even though T0++ is non-living, does it understand human aging from both biological and
+            social perspectives? Let’s find out!</div>
+    </p>
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement" href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_1.png"
+                title=""><img src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_1.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement" href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_2.png"
+                title=""><img src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_2.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement" href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_3.png"
+                title=""><img src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_3.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+    <p>
+        <div class="md-text">How about some questions about religion?</div>
+    </p>
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement" href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_4.png"
+                title=""><img src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_4.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement" href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_5.png"
+                title=""><img src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_5.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement" href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_6.png"
+                title=""><img src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_6.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+    <p>
+        <div class="md-text">One cannot help but wonder if T0++ is knowledgeable about its friends. How much does T0++
+            know about machine learning?</div>
+    </p>
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement" href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_7.png"
+                title=""><img src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_7.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement" href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_8.png"
+                title=""><img src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_8.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement" href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_9.png"
+                title=""><img src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_9.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+    <p>
+        <div class="md-text">While we do not intend to let T0++ run a business, let us still subject it to questions
+            about business ethics.</div>
+    </p>
+    <p class="md-image-group row">
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_10.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_10.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_11.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_11.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+        <div class="col-sm-4"><a class="md-image-selfref cboxElement"
+                href="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_12.png" title=""><img
+                    src="https://raw.githubusercontent.com/yongzx/bigscience-workshop.github.io/gh-pages/en/pages/uploads/images/T0_prompts/world_12.png" alt="placeholder" width="400"
+                    class="img-responsive img-thumbnail"></a></div>
+    </p>
+</div>
+
+
+<!-- SIXTH BOX -->
+<div id="md-content" class="col-md-12">
+    <h2 class="md-inpage-anchor"><strong>Public Accessibility</strong><span class="anchor-highlight"
+            style="display: none;"><a href="#!pages/t0.md#Public_Accessibility">#</a></span></h2>
+    <p>
+        <div class="md-text">You can <a href="https://huggingface.co/bigscience/T0pp">try T0 directly in your
+                browser</a> or <a href="https://huggingface.co/bigscience/T0pp">download it from the HuggingFace model
+                repository</a>. A <a href="(https://huggingface.co/bigscience/T0_3B">smaller version</a> (3 billion
+            parameters instead of 11 billion parameters) is also available.</div>
+    </p>
+    <p>
+        <div class="md-text">Finally, in this Github repository, we showcase scripts to perform inference on T0 with one
+            or multiple GPUs, along with instructions to reproduce training or evaluation reported in our paper (Sanh et
+            al., 2021).</div>
+    </p>
+    <h2 class="md-inpage-anchor"><strong>Conclusion</strong><span class="anchor-highlight" style="display: none;"><a
+                href="#!pages/t0.md#Conclusion">#</a></span></h2>
+    <p>
+        <div class="md-text">The ability to generalize to new tasks is the cornerstone of a general AI model. We are
+            excited about T0 because we show that it is possible to train a smaller large language model with comparable
+            generalization performance to models with 100s of billions of parameters. We showcase how we can apply T0 to
+            cooking and answering world knowledge, and we are excited to see more of its novel applications and further
+            research on zero-shot learning.</div>
+    </p>
+    <h2 class="md-inpage-anchor"><strong>Acknowledgments</strong><span class="anchor-highlight"
+            style="display: none;"><a href="#!pages/t0.md#Acknowledgments">#</a></span></h2>
+    <p>
+        <div class="md-text">We would like to acknowledge the co-authors for this blog post: Yong Zheng-Xin, Victor
+            Sanh, and Steven Liu. </div>
+    </p>
+    <p>
+        <div class="md-text">Thanks to those who provided ideas for applications of T0: Colin Raffel, Victor Sanh,
+            Lintang Sutawika, Zaid Alyafeai, M Saiful Bari, Yong Zheng-Xin, and Albert Webson.</div>
+    </p>
+    <p>
+        <div class="md-text">Thanks to those who contributed prompts and figures: Eliza Szczechla, Stella Biderman, and
+            Colin Raffel.</div>
+    </p>
+    <p>
+        <div class="md-text">Thanks to the prompt-engineering subgroup at BigScience for creating T0 and providing
+            feedback on the blog post. </div>
+    </p>
+    <h2 class="md-inpage-anchor"><strong>References</strong><span class="anchor-highlight" style="display: none;"><a
+                href="#!pages/t0.md#References">#</a></span></h2>
+    <p>
+        <div class="md-text">[1] BIG-bench collaboration. “Beyond the imitation game: Measuring and extrapolating the
+            capabilities of language models.” In preparation, 2021.</div>
+    </p>
+    <p>
+        <div class="md-text">[2] Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena,
+            Yanqi Zhou, Wei Li, and Peter J. Liu. “Exploring the Limits of Transfer Learning with a Unified Text-to-Text
+            Transformer”. In <em>Journal of Machine Learning Research</em>, 2020.</div>
+    </p>
+    <p>
+        <div class="md-text">[3] Dan Hendrycks, Collin Burns, Steven Basart, Andy Zou, Mantas Mazeika, Dawn Song, and
+            Jacob Steinhardt. “Measuring Massive Multitask Language Understanding.” In <em>Proceedings of the
+                International Conference on Learning Representations (ICLR)</em>, 2021.</div>
+    </p>
+    <p>
+        <div class="md-text">[4] Michał Bień, Michał Gilski, Martyna Maciejewska, Wojciech Taisner, Dawid Wisniewski,
+            and Agnieszka Lawrynowicz. “RecipeNLG: A cooking recipes dataset for semi-structured text generation.” In
+            <em>Proceedings of the 13th International Conference on Natural Language Generation</em>, 2020.</div>
+    </p>
+    <p>
+        <div class="md-text">[5] Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared D Kaplan, Prafulla
+            Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, Sandhini Agarwal, Ariel
+            Herbert-Voss, Gretchen Krueger, Tom Henighan, Rewon Child, Aditya Ramesh, Daniel Ziegler, Jeffrey Wu,
+            Clemens Winter, Chris Hesse, Mark Chen, Eric Sigler, Mateusz Litwin, Scott Gray, Benjamin Chess, Jack Clark,
+            Christopher Berner, Sam McCandlish, Alec Radford, Ilya Sutskever, and Dario Amodei. “Language Models are
+            Few-Shot Learners.” In <em>Advances in Neural Information Processing Systems</em>, 2020.</div>
+    </p>
+    <p>
+        <div class="md-text">[6] Victor Sanh, Albert Webson, Colin Raffel, Stephen H. Bach, Lintang Sutawika, Zaid
+            Alyafeai, Antoine Chaffin, Arnaud Stiegler, Teven Le Scao, Arun Raja, Manan Dey, M Saiful Bari, Canwen Xu,
+            Urmish Thakker, Shanya Sharma Sharma, Eliza Szczechla, Taewoon Kim, Gunjan Chhablani, Nihal Nayak, Debajyoti
+            Datta, Jonathan Chang, Mike Tian-Jian Jiang, Han Wang, Matteo Manica, Sheng Shen, Zheng Xin Yong, Harshit
+            Pandey, Rachel Bawden, Thomas Wang, Trishala Neeraj, Jos Rozen, Abheesht Sharma, Andrea Santilli, Thibault
+            Fevry, Jason Alan Fries, Ryan Teehan, Stella Biderman, Leo Gao, Tali Bers, Thomas Wolf, and Alexander M.
+            Rush. “Multitask Prompted Training Enables Zero-Shot Task Generalization.” <em>Preprint
+                (arXiv:2110.08207)</em>, 2021.</div>
+    </p>
+</div>
